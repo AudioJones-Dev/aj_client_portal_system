@@ -202,6 +202,26 @@ export async function getClient(): Promise<Client> {
   }, seed.client);
 }
 
+/**
+ * Operator/AJ-Digital admin — distinct from the client-org User.role. Gated on
+ * the Clerk publicMetadata.role === "admin" flag (set only on staff accounts).
+ * In seed-mode (no auth) the back-office is open for local development.
+ */
+export async function isAdmin(): Promise<boolean> {
+  if (!authEnabled) return true;
+  const { auth, currentUser } = await import("@clerk/nextjs/server");
+  const { userId, sessionClaims } = await auth();
+  if (!userId) return false;
+  if ((sessionClaims?.metadata as { role?: string } | undefined)?.role === "admin") return true;
+  try {
+    const u = await currentUser();
+    if ((u?.publicMetadata as { role?: string } | undefined)?.role === "admin") return true;
+  } catch {
+    /* ignore */
+  }
+  return false;
+}
+
 export async function getProjects(): Promise<Project[]> {
   return scoped(async (db, tenantId) => {
     const { data } = await db

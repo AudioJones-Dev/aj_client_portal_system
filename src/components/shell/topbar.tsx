@@ -10,10 +10,12 @@ export function Topbar({
   user,
   client,
   pendingCount,
+  isAdmin = false,
 }: {
   user: User;
   client: Client;
   pendingCount: number;
+  isAdmin?: boolean;
 }) {
   const initials = user.name
     .split(" ")
@@ -51,6 +53,12 @@ export function Topbar({
             </span>
           )}
         </Link>
+
+        {isAdmin && (
+          <Link href="/admin" className="hidden rounded-pill border border-signal/40 bg-signal/10 px-3 py-1.5 text-xs font-semibold text-tx transition-colors hover:bg-signal/20 sm:inline-flex">
+            Admin
+          </Link>
+        )}
 
         <ThemeToggle />
 

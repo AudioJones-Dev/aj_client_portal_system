@@ -9,6 +9,7 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 const authEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
 const isProtected = createRouteMatcher([
+  "/admin(.*)",
   "/home(.*)",
   "/projects(.*)",
   "/approvals(.*)",
