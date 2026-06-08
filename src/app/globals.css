@@ -1,0 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * AJ Digital Client Portal — design tokens.
+ *
+ * "Dark signal cockpit": dark, premium, operational, minimal, readable, with
+ * ONE strong signal color used sparingly (≈3% of the surface). Light-first
+ * default with a dark toggle (next-themes, `.dark` class).
+ *
+ * Visual law:  80% dark neutral · 10% elevated surface · 7% muted text/borders
+ *              · 3% signal yellow.
+ * The client-portal dark variant uses a slightly softer canvas/surface than the
+ * internal dashboard so it reads calmer.
+ */
+
+:root {
+  /* Structural */
+  --bg: #f6f7f9;
+  --canvas: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #fbfcfd; /* elevated */
+  --inset: #f0f2f5;
+  --recessed: #eef1f5; /* nav rail / deep wells */
+
+  /* Lines */
+  --line: #e4e8ee;
+  --border-soft: rgba(13, 17, 23, 0.07);
+  --border-strong: #cbd3dd;
+
+  /* Text */
+  --tx: #0d1117;
+  --tx2: #4a5568;
+  --tx3: #8a94a3; /* muted */
+  --text-faint: #a6aeb9;
+
+  /* Signal (brand) */
+  --signal: #e8ff5a;
+  --signal-hover: #d6f23a;
+  --signal-ink: #0d1117;
+  --signal-soft: rgba(232, 255, 90, 0.2);
+  --signal-border: rgba(13, 17, 23, 0.14);
+
+  /* Status */
+  --ok: #16a34a;
+  --warn: #c98a00;
+  --bad: #dc2626;
+  --info: #2563eb;
+
+  /* Data accents (charts only) */
+  --data-blue: #3a8fd9;
+  --data-green: #5ac36b;
+  --data-magenta: #c84b86;
+  --data-coral: #e58940;
+
+  /* Elevation */
+  --shadow-card: 0 1px 2px rgba(13, 17, 23, 0.04), 0 1px 3px rgba(13, 17, 23, 0.06);
+  --shadow-hover: 0 4px 12px rgba(13, 17, 23, 0.08), 0 2px 4px rgba(13, 17, 23, 0.05);
+  --shadow-glass: 0 8px 30px rgba(13, 17, 23, 0.08);
+  --shadow-focal: 0 0 0 1px rgba(13, 17, 23, 0.06), 0 18px 50px -24px rgba(232, 255, 90, 0.55);
+
+  --hero-glow: radial-gradient(120% 120% at 0% 0%, rgba(232, 255, 90, 0.22) 0%, rgba(232, 255, 90, 0) 45%),
+    radial-gradient(120% 120% at 100% 0%, rgba(37, 99, 235, 0.08) 0%, rgba(37, 99, 235, 0) 50%);
+
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(13, 17, 23, 0.06);
+}
+
+.dark {
+  /* Structural — client-portal cockpit (softer than the internal dash) */
+  --bg: #0d1117;
+  --canvas: #151b24;
+  --surface: #202b3a;
+  --surface-2: #2a3648; /* elevated */
+  --inset: #1a2330;
+  --recessed: #0b1018; /* sidebar / nav rail */
+
+  /* Lines */
+  --line: #334155;
+  --border-soft: rgba(148, 163, 184, 0.18);
+  --border-strong: #475569;
+
+  /* Text */
+  --tx: #f8fafc;
+  --tx2: #cbd5e1;
+  --tx3: #94a3b8; /* muted */
+  --text-faint: #64748b;
+
+  /* Signal (brand) */
+  --signal: #e8ff5a;
+  --signal-hover: #d6f23a;
+  --signal-ink: #0d1117;
+  --signal-soft: rgba(232, 255, 90, 0.12);
+  --signal-border: rgba(232, 255, 90, 0.36);
+
+  /* Status */
+  --ok: #8fe27a;
+  --warn: #facc15;
+  --bad: #f87171;
+  --info: #60a5fa;
+
+  /* Data accents */
+  --data-blue: #3a8fd9;
+  --data-green: #5ac36b;
+  --data-magenta: #c84b86;
+  --data-coral: #e58940;
+
+  /* Elevation — hairline, not heavy shadows */
+  --shadow-card: none;
+  --shadow-hover: none;
+  --shadow-glass: 0 8px 30px rgba(0, 0, 0, 0.5);
+  --shadow-focal: 0 0 0 1px rgba(232, 255, 90, 0.35), 0 18px 50px -24px rgba(232, 255, 90, 0.65);
+
+  --hero-glow: radial-gradient(120% 120% at 0% 0%, rgba(232, 255, 90, 0.14) 0%, rgba(232, 255, 90, 0) 45%),
+    radial-gradient(120% 120% at 100% 0%, rgba(88, 166, 255, 0.1) 0%, rgba(88, 166, 255, 0) 50%);
+
+  --glass-bg: rgba(21, 27, 36, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+@layer base {
+  * {
+    border-color: var(--border-soft);
+  }
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    background-color: var(--bg);
+    color: var(--tx);
+    font-family: var(--font-body), Inter, system-ui, sans-serif;
+  }
+  ::selection {
+    background: var(--signal);
+    color: var(--signal-ink);
+  }
+}
+
+@layer components {
+  /* Glassmorphism — reserved for the hero / summary surface only */
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-glass);
+  }
+
+  /* Focal signal card — exactly one per screen, max. */
+  .focal {
+    background: radial-gradient(circle at 20% 0%, #f1ff86 0%, #e8ff5a 38%, #d6f23a 100%);
+    color: #0d1117;
+    box-shadow: var(--shadow-focal);
+  }
+  .focal * {
+    border-color: rgba(13, 17, 23, 0.18) !important;
+  }
+
+  .portal-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+  }
+  .portal-scroll::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .portal-scroll::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 999px;
+  }
+}
