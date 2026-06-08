@@ -26,8 +26,9 @@ import {
 } from "@/lib/data";
 import { formatDate } from "@/lib/utils";
 
-export default async function ProjectDetailPage({ params }: { params: { id: string } }) {
-  const project = await getProject(params.id);
+export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const project = await getProject(id);
   if (!project) notFound();
 
   const [milestones, deliverables, approvals, activity] = await Promise.all([
