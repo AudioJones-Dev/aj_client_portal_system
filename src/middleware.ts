@@ -23,7 +23,14 @@ const isProtected = createRouteMatcher([
 ]);
 
 const clerkGate = clerkMiddleware(async (auth, req) => {
-  if (isProtected(req)) await auth.protect();
+  if (!isProtected(req)) return NextResponse.next();
+  const { userId } = await auth();
+  if (!userId) {
+    const signIn = new URL("/login", req.url);
+    signIn.searchParams.set("redirect_url", req.nextUrl.pathname);
+    return NextResponse.redirect(signIn);
+  }
+  return NextResponse.next();
 });
 
 const passthrough = (_req: NextRequest) => NextResponse.next();
