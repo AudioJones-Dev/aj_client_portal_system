@@ -1,4 +1,5 @@
 import { getReports } from "@/lib/data";
+import { AddReportForm } from "@/components/admin/add-report-form";
 
 export const dynamic = "force-dynamic";
 
@@ -7,6 +8,7 @@ export default async function AdminReports() {
   return (
     <div className="space-y-4">
       <h1 className="font-display text-2xl font-bold text-tx">Reports</h1>
+      <AddReportForm />
       {reports.length === 0 ? (
         <p className="text-sm text-tx3">No reports published.</p>
       ) : (

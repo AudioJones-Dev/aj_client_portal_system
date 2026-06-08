@@ -88,3 +88,64 @@ export async function submitSupportRequest(input: {
     return { ok: false, persisted: false, error: (e as Error).message };
   }
 }
+
+/** Admin: publish a report to the client. */
+export async function publishReport(input: {
+  title: string;
+  period: string;
+  summary: string;
+  href?: string;
+}): Promise<ActionResult> {
+  if (!supabaseEnabled) return { ok: true, persisted: false };
+  try {
+    const db = createAdminClient();
+    const tenantId = await resolveTenantId(db);
+    if (!tenantId) return { ok: false, persisted: false, error: "No tenant" };
+    const { error } = await db.from("reports").insert({
+      tenant_id: tenantId,
+      title: input.title,
+      period: input.period,
+      summary: input.summary,
+      href: input.href || "#",
+      published_at: new Date().toISOString(),
+    });
+    if (error) return { ok: false, persisted: false, error: error.message };
+    revalidatePath("/reports");
+    revalidatePath("/admin/reports");
+    revalidatePath("/home");
+    return { ok: true, persisted: true };
+  } catch (e) {
+    return { ok: false, persisted: false, error: (e as Error).message };
+  }
+}
+
+/** Admin: add a deliverable to a project. */
+export async function addDeliverable(input: {
+  title: string;
+  category: string;
+  status: string;
+  projectId: string;
+  href?: string;
+}): Promise<ActionResult> {
+  if (!supabaseEnabled) return { ok: true, persisted: false };
+  try {
+    const db = createAdminClient();
+    const tenantId = await resolveTenantId(db);
+    if (!tenantId) return { ok: false, persisted: false, error: "No tenant" };
+    const { error } = await db.from("deliverables").insert({
+      tenant_id: tenantId,
+      project_id: input.projectId,
+      title: input.title,
+      category: input.category,
+      status: input.status,
+      href: input.href || "#",
+      added_at: new Date().toISOString(),
+    });
+    if (error) return { ok: false, persisted: false, error: error.message };
+    revalidatePath("/deliverables");
+    revalidatePath("/admin/deliverables");
+    return { ok: true, persisted: true };
+  } catch (e) {
+    return { ok: false, persisted: false, error: (e as Error).message };
+  }
+}

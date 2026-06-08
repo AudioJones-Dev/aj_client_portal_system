@@ -1,4 +1,5 @@
 import { getApprovals } from "@/lib/data";
+import { ApprovalDecide } from "@/components/admin/approval-decide";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,7 @@ export default async function AdminApprovals() {
               </div>
               <p className="mt-2 text-sm text-tx2">{a.decisionRequired}</p>
               <p className="mt-1 text-xs text-tx3">Recommended: {a.recommendedChoice}</p>
+              {a.status === "pending" && <ApprovalDecide approvalId={a.id} />}
             </div>
           ))}
         </div>

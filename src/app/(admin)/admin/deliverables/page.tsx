@@ -1,12 +1,14 @@
-import { getDeliverables } from "@/lib/data";
+import { getDeliverables, getProjects } from "@/lib/data";
+import { AddDeliverableForm } from "@/components/admin/add-deliverable-form";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminDeliverables() {
-  const deliverables = await getDeliverables();
+  const [deliverables, projects] = await Promise.all([getDeliverables(), getProjects()]);
   return (
     <div className="space-y-4">
       <h1 className="font-display text-2xl font-bold text-tx">Deliverables</h1>
+      <AddDeliverableForm projects={projects.map((p) => ({ id: p.id, name: p.name }))} />
       <div className="overflow-x-auto rounded-card border border-line bg-surface">
         <table className="w-full text-sm">
           <thead>
